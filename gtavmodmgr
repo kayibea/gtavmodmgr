@@ -1,6 +1,6 @@
 #!/usr/bin/env lua
 
-local lfs = require "lfs"
+local path = require "constants.path"
 local argparse = require "argparse"
 
 local parser = argparse("gtavmodmgr", "Manage GTA V mod profiles")
@@ -14,7 +14,7 @@ mount:argument("name", "Profile name")
 
 local function main()
     require "utils.util".ensure_dirs {
-        lfs.currentdir() .. "/profiles",
+        path.profile_root
     }
 
     ---@type table<string, string>
