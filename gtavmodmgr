@@ -1,0 +1,32 @@
+#!/usr/bin/env lua
+
+local lfs = require "lfs"
+local argparse = require "argparse"
+
+local parser = argparse("gtavmodmgr", "Manage GTA V mod profiles")
+parser:command_target("cmd")
+
+parser:command("list", "List all profiles")
+parser:command("umount", "Unmount current profile")
+
+local mount = parser:command("mount", "Mount a profile")
+mount:argument("name", "Profile name")
+
+local function main()
+    require "utils.util".ensure_dirs {
+        lfs.currentdir() .. "/profiles",
+    }
+
+    ---@type table<string, string>
+    local args = parser:parse()
+
+    if args.umount then
+        require "commands.umount" ()
+    elseif args.list then
+        require "commands.list" ()
+    elseif args.mount then
+        require "commands.mount" (args.name)
+    end
+end
+
+main()
